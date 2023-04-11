@@ -15,22 +15,31 @@ const GettingAllBlogs = asyncHandler(async (req, res) => {
   } catch (err) {
     throw new Error("error occurred!");
   }
-  
 });
-const PostBlog = asyncHandler(async (req, res, next) => {
-  const { title, description, body, author } = req.body;
 
+const GettingUserBlogs = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  const { body } = req.body;
+  const Blog = await schematic.find({ userId });
+  res.status(200).send(Blog);
+});
+
+const PostBlog = asyncHandler(async (req, res, next) => {
+  const { title, description, body, author, category } = req.body;
+  const userId = req.params.id;
   const Blogs = await schematic.create({
+    userId,
     title,
     description,
     body,
     author,
+    category,
   });
   res.status(200).send(Blogs);
 });
 
 const GettingASingleBlog = asyncHandler(async (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
   const body = req.body;
 
   const BlogId = await schematic.findById(id, body, { new: true });
@@ -64,6 +73,12 @@ const UpdateSingleBlog = asyncHandler(async (req, res) => {
 
 const DeleteSingleBlog = asyncHandler(async (req, res) => {
   const id = req.params.id;
+
+  const user = await schematic.findById(id);
+  if (req.id !== user._id) {
+    res.status(400);
+    throw new Error("You cant delete this!");
+  }
   const DeleteBlog = await schematic.findByIdAndRemove(id);
   if (!DeleteBlog) {
     res.status(400);
@@ -72,21 +87,11 @@ const DeleteSingleBlog = asyncHandler(async (req, res) => {
   res.send("Deleted!");
 });
 
-// const FilterBlog = asyncHandler(async(req, res)=>{
-//   const category = req.params.category;
-//   const FindCategory = schematic.find({category:category})
-//   if(FindCategory){
-//     res.status(200).send(FindCategory)
-//   }
-// })
-
 module.exports = {
   PostBlog,
   GettingAllBlogs,
   GettingASingleBlog,
   UpdateSingleBlog,
   DeleteSingleBlog,
-  // FilterBlog
-  // updateComment,
-  // GetAllBlogComment,
+  GettingUserBlogs,
 };

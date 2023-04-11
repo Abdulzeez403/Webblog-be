@@ -6,26 +6,28 @@ const {
   GettingASingleBlog,
   UpdateSingleBlog,
   DeleteSingleBlog,
-  updateComment,
-  GetAllBlogComment
+  GettingUserBlogs
 } = require("../control/control");
+
+const { VerifyToken } = require("../middleware/verifyToken");
 
 //Receiving data from frontend sent it to database
 //fetching all the data from the database to the frontend
 
-router.route("/").get(GettingAllBlogs).post(PostBlog);
+router.route("/").get(GettingAllBlogs);
 
 //Update a single blog
 // Delete a single blog
 //fetching a single blog
 router
   .route("/:id")
-  .delete(DeleteSingleBlog)
+  .get(GettingUserBlogs)
+  .post(PostBlog)
+  .delete(VerifyToken, DeleteSingleBlog)
   .get(GettingASingleBlog)
   .put(UpdateSingleBlog);
 
-
-  //post a  comment
+//post a  comment
 //fetching comments
 // router
 // .route("/:id/comment")
