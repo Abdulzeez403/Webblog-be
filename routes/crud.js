@@ -6,7 +6,7 @@ const {
   GettingASingleBlog,
   UpdateSingleBlog,
   DeleteSingleBlog,
-  GettingUserBlogs
+  GettingUserBlogs,
 } = require("../control/control");
 
 const { VerifyToken } = require("../middleware/verifyToken");
@@ -21,17 +21,9 @@ router.route("/").get(GettingAllBlogs);
 //fetching a single blog
 router
   .route("/:id")
-  .get(GettingUserBlogs)
-  .post(PostBlog)
-  .delete(VerifyToken, DeleteSingleBlog)
   .get(GettingASingleBlog)
+  .post(PostBlog)
+  .delete(DeleteSingleBlog)
   .put(UpdateSingleBlog);
-
-//post a  comment
-//fetching comments
-// router
-// .route("/:id/comment")
-// .get(GetAllBlogComment).
-// post(updateComment);
 
 module.exports = router;

@@ -9,23 +9,17 @@ const PostDetail = new mongoose.Schema(
     title: {
       type: String,
     },
-    description: {
-      type: String,
-    },
+
     body: {
       type: String,
     },
 
-    author: {
+    image: {
       type: String,
     },
-    category:{
-      type:String,
+    category: {
+      type: String,
     },
-
-    // image: {
-    //   type: String,
-    // },
   },
   { timestamps: true }
 );

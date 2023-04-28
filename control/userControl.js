@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const UserSchema = require("../models/userSchema");
+const schematic = require("../models/schema");
+
 
 const RegisterUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -75,8 +77,15 @@ const CurrentUser = asyncHandler( async (req, res) => {
   res.send({ message: "The current user!" });
 });
 
+const GettingUserBlogs = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  const Blog = await schematic.find({ userId });
+  res.status(200).send(Blog);
+});
+
 module.exports = {
   RegisterUser,
   LoginUser,
   CurrentUser,
+  GettingUserBlogs
 };
